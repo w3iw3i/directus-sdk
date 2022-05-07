@@ -9,42 +9,46 @@ jobs:
     name: Run Python Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v2
 
-      - uses: isbang/compose-action@v1.0.0
-        with:
-          compose-file: './docker-compose.test.yml'
-          down-flags: '--volumes'
+      - name: Run pytest
+        run: make test
 
-      - name: Set up Python 3.6
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.6
+      # - uses: isbang/compose-action@v1.0.0
+      #   with:
+      #     compose-file: './docker-compose.test.yml'
+      #     down-flags: '--volumes'
 
-      - name: Install Python dependencies
-        run: |
-          sudo apt install -y $(grep -o ^[^#][[:alnum:]-]* "packages.list")
-          python3 -m pip install --upgrade pip
-          pip3 install -r requirements.txt
-          pip3 install -e .
+      # - name: Set up Python 3.6
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.6
 
-      - name: Test with pytest
-        id: pytest
-        run: |
-          # python3 tests/add_access_token.py
-          BASE_URL=http://directus:8055 pytest --exitfirst --verbose --failed-first --cov=. --cov-report html
-          total=$(cat htmlcov/index.html | grep -i -C 4 total | tail -n 1 | grep -Eo '[0-9]+%|[0-9]+\.[0-9]+%' | grep -Eo '[0-9]+|[0-9]+\.[0-9]+')
-          if (( $(echo "$total <= 50" | bc -l) )) ; then
-            COLOR=red
-          elif (( $(echo "$total > 80" | bc -l) )); then
-            COLOR=green
-          else
-            COLOR=orange
-          fi
+      # - name: Install Python dependencies
+      #   run: |
+      #     sudo apt install -y $(grep -o ^[^#][[:alnum:]-]* "packages.list")
+      #     python3 -m pip install --upgrade pip
+      #     pip3 install -r requirements.txt
+      #     pip3 install -e .
 
-          # Generates a GitHub Workflow output named `lines` with a coverage value
-          echo "##[set-output name=coverage;]${total}"
-          echo "##[set-output name=color;]${COLOR}"
+      # - name: Test with pytest
+      #   id: pytest
+      #   run: |
+      #     # python3 tests/add_access_token.py
+      #     BASE_URL=http://directus:8055 pytest --exitfirst --verbose --failed-first --cov=. --cov-report html
+      #     total=$(cat htmlcov/index.html | grep -i -C 4 total | tail -n 1 | grep -Eo '[0-9]+%|[0-9]+\.[0-9]+%' | grep -Eo '[0-9]+|[0-9]+\.[0-9]+')
+      #     if (( $(echo "$total <= 50" | bc -l) )) ; then
+      #       COLOR=red
+      #     elif (( $(echo "$total > 80" | bc -l) )); then
+      #       COLOR=green
+      #     else
+      #       COLOR=orange
+      #     fi
+
+      #     # Generates a GitHub Workflow output named `lines` with a coverage value
+      #     echo "##[set-output name=coverage;]${total}"
+      #     echo "##[set-output name=color;]${COLOR}"
 
       # Get current banch name to use it as test directory
       - name: Extract branch name
