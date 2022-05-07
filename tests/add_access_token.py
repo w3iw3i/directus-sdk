@@ -1,3 +1,6 @@
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from directus.clients import DirectusClient_V9
 import os
 
