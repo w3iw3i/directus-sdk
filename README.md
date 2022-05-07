@@ -38,6 +38,24 @@ pip install -r examples/requirements.txt
 
 ## Usage
 
+### Start local Directus instance
+
+```
+make quick-start
+```
+
+### Run test
+
+```
+make test
+```
+
+### Destroy local instance
+
+```
+make destroy
+```
+
 ### Intialize directus client
 
 ```python
