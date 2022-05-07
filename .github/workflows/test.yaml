@@ -33,14 +33,14 @@ jobs:
       - name: Install Python dependencies
         run: |
           sudo apt install -y $(grep -o ^[^#][[:alnum:]-]* "packages.list")
-          python3 -m pip install --upgrade pip
-          pip3 install -r requirements.txt
-          pip3 install -e .
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e .
 
       - name: Test with pytest
         id: pytest
         run: |
-          python3 tests/add_access_token.py
+          python tests/add_access_token.py
           pytest --exitfirst --verbose --failed-first --cov=. --cov-report html
           total=$(cat htmlcov/index.html | grep -i -C 4 total | tail -n 1 | grep -Eo '[0-9]+%|[0-9]+\.[0-9]+%' | grep -Eo '[0-9]+|[0-9]+\.[0-9]+')
           if (( $(echo "$total <= 50" | bc -l) )) ; then
