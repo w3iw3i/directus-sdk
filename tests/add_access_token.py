@@ -5,10 +5,8 @@ from directus.clients import DirectusClient_V9
 import os
 
 url = os.environ.get("BASE_URL", "http://localhost:8055")
-email = os.environ.get("ADMIN_EMAIL", "admin@example.com"),
-password = os.environ.get("ADMIN_PASSWORD", "password")
 
-client = DirectusClient_V9(url=url, email=email, password=password)
+client = DirectusClient_V9(url=url, email="admin@example.com", password="password")
 
 id = client.get("/users/me")['id']
 

@@ -15,7 +15,7 @@ jobs:
       - name: Run docker-compose file
         uses: isbang/compose-action@v1.0.0
         with:
-          compose-file: './docker-compose.test.yml'
+          compose-file: './docker-compose.yml'
           down-flags: '--volumes'
 
       - name: Set up Python 3.6
@@ -32,11 +32,9 @@ jobs:
 
       - name: Test with pytest
         id: pytest
-        shell: bash
         run: |
-          # python3 tests/add_access_token.py
-          bash quick-start.sh directus
-          BASE_URL=http://directus:8055 pytest --exitfirst --verbose --failed-first --cov=. --cov-report html
+          python3 tests/add_access_token.py
+          pytest --exitfirst --verbose --failed-first --cov=. --cov-report html
           total=$(cat htmlcov/index.html | grep -i -C 4 total | tail -n 1 | grep -Eo '[0-9]+%|[0-9]+\.[0-9]+%' | grep -Eo '[0-9]+|[0-9]+\.[0-9]+')
           if (( $(echo "$total <= 50" | bc -l) )) ; then
             COLOR=red
