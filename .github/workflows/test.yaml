@@ -8,6 +8,13 @@ jobs:
   build:
     name: Run Python Tests
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: directus-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_PASSWORD: password
     steps:
       - name: Checkout Repo Content
         uses: actions/checkout@v2
