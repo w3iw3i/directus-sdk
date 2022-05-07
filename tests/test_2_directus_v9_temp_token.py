@@ -6,8 +6,8 @@ import pytest, uuid
 
 client = DirectusClient_V9(
     url=os.environ.get("BASE_URL", "http://localhost:8055"),
-    email="admin@example.com",
-    password="password"
+    email=os.environ.get("ADMIN_EMAIL", "admin@example.com"),
+    password=os.environ.get("ADMIN_PASSWORD", "password")
 )
 
 
