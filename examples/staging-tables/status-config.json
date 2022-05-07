@@ -1,0 +1,71 @@
+[
+    {
+        "field": "status",
+        "type": "string",
+        "schema": {
+            "data_type": "character varying",
+            "default_value": "published",
+            "max_length": 255,
+            "numeric_precision": null,
+            "numeric_scale": null,
+            "is_generated": false,
+            "is_nullable": false,
+            "is_unique": false,
+            "is_primary_key": false,
+            "has_auto_increment": false,
+            "comment": null,
+            "schema": "public",
+            "foreign_key_schema": null,
+            "foreign_key_table": null,
+            "foreign_key_column": null
+        },
+        "meta": {
+            "special": null,
+            "interface": "select-dropdown",
+            "options": {
+                "choices": [
+                    {
+                        "text": "Draft",
+                        "value": "draft"
+                    },
+                    {
+                        "text": "Published",
+                        "value": "published"
+                    },
+                    {
+                        "text": "Delete",
+                        "value": "delete"
+                    }
+                ]
+            },
+            "display": "labels",
+            "display_options": {
+                "choices": [
+                    {
+                        "text": "Draft",
+                        "value": "draft",
+                        "background": "#FFEE00"
+                    },
+                    {
+                        "text": "Published",
+                        "value": "published",
+                        "background": "#1EFF00"
+                    },
+                    {
+                        "text": "Delete",
+                        "value": "delete",
+                        "background": "#FF0000"
+                    }
+                ],
+                "showAsDot": true
+            },
+            "readonly": false,
+            "hidden": false,
+            "sort": null,
+            "width": "full",
+            "group": null,
+            "translation": null,
+            "note": null
+        }
+    }
+]

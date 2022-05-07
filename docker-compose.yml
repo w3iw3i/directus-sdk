@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  directus:
+    image: directus/directus:9.9.0
+    container_name: directus
+    ports:
+      - 8055:8055
+    networks:
+      - directus
+    environment:
+      PUBLIC_URL: http://localhost:8055
+      KEY: 08a5f42d0ff44eead3d5b47957b9f3a6372521aff6bcaafab4c1f23567cca497
+      SECRET: 8c274f83fc08fe7553409da10c9ff519b54284c5c05628fec722919636aad09e
+      DB_CLIENT: pg
+      DB_DATABASE: $POSTGRES_DB
+      DB_PORT: 5432
+      DB_HOST: $POSTGRES_HOST
+      DB_USER: $POSTGRES_USER
+      DB_PASSWORD: $POSTGRES_PASSWORD
+      ADMIN_EMAIL: $ADMIN_EMAIL
+      ADMIN_PASSWORD: $ADMIN_PASSWORD
+    depends_on:
+      - postgres
+    restart: on-failure
+
+  postgres:
+    image: postgres:13
+    container_name: postgres-db
+    ports:
+      - 5432:5432
+    networks:
+      - directus
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_HOST: $POSTGRES_HOST
+
+networks:
+  directus:

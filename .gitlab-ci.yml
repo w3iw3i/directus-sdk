@@ -1,0 +1,40 @@
+variables:
+  CI_TTY_FLAG: "-T"
+
+stages:
+  - lint
+  - test
+  - deploy
+
+services:
+  - name: docker:20.10.12-dind
+    alias: docker
+
+lint:
+  stage: lint
+  environment: build-dev
+  tags:
+    - k8s
+    - dev
+  script:
+    - make lint
+
+unit_test:
+  stage: test
+  tags:
+    - k8s
+    - dev
+  script:
+    make test
+
+deploy:
+  image: python:3.6-stretch
+  stage: deploy
+  tags:
+    - k8s
+    - dev
+  when: manual
+  only:
+    - master
+  script:
+    - make ci_deploy

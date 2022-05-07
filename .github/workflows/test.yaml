@@ -1,0 +1,105 @@
+name: Tests
+on:
+  push:
+    branches-ignore:
+      - 'badges'
+ 
+jobs:
+  build:
+    name: Run Python Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: isbang/compose-action@v1.0.0
+        with:
+          compose-file: './docker-compose.yml'
+          down-flags: '--volumes'
+
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+
+      - name: Install Python dependencies
+        run: |
+          sudo apt install -y $(grep -o ^[^#][[:alnum:]-]* "packages.list")
+          python3 -m pip install --upgrade pip
+          pip3 install -r requirements.txt
+          pip3 install -e .
+
+      - name: Test with pytest
+        id: pytest
+        run: |
+          python3 tests/add_access_token.py
+          pytest --exitfirst --verbose --failed-first --cov=. --cov-report html
+          total=$(cat htmlcov/index.html | grep -i -C 4 total | tail -n 1 | grep -Eo '[0-9]+%|[0-9]+\.[0-9]+%' | grep -Eo '[0-9]+|[0-9]+\.[0-9]+')
+          if (( $(echo "$total <= 50" | bc -l) )) ; then
+            COLOR=red
+          elif (( $(echo "$total > 80" | bc -l) )); then
+            COLOR=green
+          else
+            COLOR=orange
+          fi
+
+          # Generates a GitHub Workflow output named `lines` with a coverage value
+          echo "##[set-output name=coverage;]${total}"
+          echo "##[set-output name=color;]${COLOR}"
+
+      # Get current banch name to use it as test directory
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Prepare environment
+        id: coverage
+        run: |
+          # Output values to be used by other steps
+          echo "##[set-output name=path;]${BADGE_PATH}"
+          echo "##[set-output name=branch;]${BRANCH}"
+        env:
+          BADGE_PATH: ${{ steps.extract_branch.outputs.branch }}/coverage-badge.svg
+          BRANCH: badges
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.coverage.outputs.branch }}
+
+      # Create the directory where badges will be saved, if needed
+      - name: Create destination directory
+        env:
+          BADGE_PATH: ${{ steps.coverage.outputs.path }}
+        run: mkdir -p "${BADGE_PATH%/*}"
+
+      # Use the output from the `coverage` step
+      - name: Generate the badge SVG image
+        id: badge
+        env:
+          COVERAGE: ${{ steps.pytest.outputs.coverage }}
+          COLOR: ${{ steps.pytest.outputs.color }}
+          BADGE_PATH: ${{ steps.coverage.outputs.path }}
+        run: curl "https://img.shields.io/badge/coverage-$COVERAGE%25-$COLOR" > ${BADGE_PATH}
+
+      - name: Upload badge as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: badge
+          path: ${{ steps.coverage.outputs.path }}
+          if-no-files-found: error
+
+      - name: Commit badge
+        continue-on-error: true
+        env:
+          BADGE: ${{ steps.coverage.outputs.path }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add "${BADGE}"
+          git commit -m "Add/Update badge"
+      - name: Push badge commit
+        uses: ad-m/github-push-action@master
+        if: ${{ success() }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.coverage.outputs.branch }}

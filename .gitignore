@@ -1,0 +1,9 @@
+__pycache__
+.vscode
+.pytest_cache
+dist
+*.sql
+build
+directus.egg-info
+*.csv
+*.env

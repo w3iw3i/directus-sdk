@@ -1,0 +1,4 @@
+requests
+uuid
+pytest
+pytest-cov
