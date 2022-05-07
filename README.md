@@ -1,7 +1,6 @@
 # Directus Python SDK
 
-> This SDK is actively under development, put any features/issues as a gitlab issue and I will try my best to look into those. Updates will come 
-somewhat regularly at the beginning so make sure to update your directus version by reinstalling it via pip
+> This software development kit is meant to be used with Directus[https://directus.io/]. Anu updates to the SDK would require reinstalling the package via pip.
 
 ## Requirements
 
@@ -28,8 +27,7 @@ ADMIN_PASSWORD=xxxx
 
 ## Examples
 
-Examples of using the directus clients are provided in the `examples/` folder. These scripts invovle some of the more common tasks we have to do
-to maintain directus platform for our users
+Examples of using the directus clients are provided in the `examples/` folder. These scripts are used to automate the execution of the common tasks required in maintaining local deployment of Directus.
 
 Run pip install command below to install the dependencies to run the examples scripts
 ```bash
@@ -48,19 +46,19 @@ client = DirectusClient_V9(url="http://localhost:8055", token="admin")
 
 
 # Create a directus client connection with user email and password
-client = DirectusClient_V9(url="http://localhost:8055", email="admin@example.com", password="P@ssw0rd123")
+client = DirectusClient_V9(url="http://localhost:8055", email=ADMIN_EMAIL, password=ADMIN_PASSWORD)
 ```
 
 ### Logging in and out of the client
 
 ```python
-client = DirectusClient_V9(url="http://localhost:8055", email="admin@example.com", password="P@ssw0rd123")
+client = DirectusClient_V9(url="http://localhost:8055", email=ADMIN_EMAIL, password=ADMIN_PASSWORD)
 # Log out and use static token instead
 client.logout()
 client.static_token = "admin"
 # make sure to set static token to None before using a temporary token with the login command
 client.static_token = None
-client.login(email="admin@example.com", password="P@ssw0rd123")
+client.login(email=ADMIN_EMAIL, password=ADMIN_PASSWORD)
 ```
 
 ### Generic API requests
