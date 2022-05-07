@@ -1,10 +1,3 @@
-## Usage
-
-```
-cd directus-sdk
-pip install .
-```
-
 # Directus Python SDK
 
 > This SDK is actively under development, put any features/issues as a gitlab issue and I will try my best to look into those. Updates will come 
@@ -21,6 +14,17 @@ Simply install the pip module by running:
 ```bash
 pip install -e .
 ```
+
+## Setup environment variables
+
+Add a .env file in the project folder with the following environment variables:
+
+POSTGRES_HOST=xxxx
+POSTGRES_DB=xxxx
+POSTGRES_USER=xxxx
+POSTGRES_PASSWORD=xxxx
+ADMIN_EMAIL=xxxx
+ADMIN_PASSWORD=xxxx
 
 ## Examples
 
