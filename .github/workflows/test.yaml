@@ -31,8 +31,8 @@ jobs:
       - name: Test with pytest
         id: pytest
         run: |
-          python3 tests/add_access_token.py
-          pytest --exitfirst --verbose --failed-first --cov=. --cov-report html
+          # python3 tests/add_access_token.py
+          BASE_URL=http://directus:8055 pytest --exitfirst --verbose --failed-first --cov=. --cov-report html
           total=$(cat htmlcov/index.html | grep -i -C 4 total | tail -n 1 | grep -Eo '[0-9]+%|[0-9]+\.[0-9]+%' | grep -Eo '[0-9]+|[0-9]+\.[0-9]+')
           if (( $(echo "$total <= 50" | bc -l) )) ; then
             COLOR=red
