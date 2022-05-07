@@ -1,6 +1,6 @@
 # Directus Python SDK
 
-> This software development kit is meant to be used with Directus[https://directus.io/]. Anu updates to the SDK would require reinstalling the package via pip.
+> This software development kit is meant to be used with [Directus](https://directus.io/). Anu updates to the SDK would require reinstalling the package via pip.
 
 ## Requirements
 
@@ -18,12 +18,14 @@ pip install -e .
 
 Add a .env file in the project folder with the following environment variables:
 
+```
 POSTGRES_HOST=xxxx
 POSTGRES_DB=xxxx
 POSTGRES_USER=xxxx
 POSTGRES_PASSWORD=xxxx
 ADMIN_EMAIL=xxxx
 ADMIN_PASSWORD=xxxx
+```
 
 ## Examples
 
